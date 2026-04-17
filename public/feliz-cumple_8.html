@@ -178,7 +178,7 @@
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Press Start 2P', monospace;
-    font-size: clamp(18px, 3.4vw, 34px);
+    font-size: clamp(23px, 4.4vw, 44px);
     color: rgba(245, 245, 235, 0.78);
     text-shadow: 2px 2px 0 rgba(0,0,0,0.7), 0 0 10px rgba(0,0,0,0.45);
     pointer-events: none;
@@ -202,6 +202,16 @@
     z-index: 10;
     letter-spacing: 0.4px;
     width: min(94vw, 520px);
+  }
+  @media (max-width: 768px) {
+    .title,
+    .name,
+    .message,
+    .note,
+    .hint,
+    .music-hint {
+      left: 47%;
+    }
   }
   @keyframes fade { to { opacity: 0; } }
 </style>
