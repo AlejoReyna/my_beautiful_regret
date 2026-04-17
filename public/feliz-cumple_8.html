@@ -967,9 +967,12 @@ function drawCelestial(time) {
     // bodyPhase 0..1 (0 = rising, 0.5 = zenith, 1 = setting)
     if (bodyPhase < -0.05 || bodyPhase > 1.05) return;
     const p = Math.max(0, Math.min(1, bodyPhase));
-    const cx = W * (0.12 + p * 0.76);
-    const cy = H * 0.45 - Math.sin(p * Math.PI) * H * 0.32;
-    const r  = Math.max(22, Math.min(W, H) * 0.055);
+    const cxBase = W * (0.12 + p * 0.76);
+    const cyBase = H * 0.50 - Math.sin(p * Math.PI) * H * 0.28;
+    const rBase  = Math.max(22, Math.min(W, H) * 0.055);
+    const cx = isSun ? cxBase + W * 0.14 : cxBase;
+    const cy = isSun ? cyBase + H * 0.06 : cyBase;
+    const r  = isSun ? rBase * 1.71 : rBase;
 
     // fade near horizon
     let alpha = Math.min(1, Math.sin(p * Math.PI) * 2.2);
@@ -984,6 +987,39 @@ function drawCelestial(time) {
       pixelCircle(cx, cy, r,        '#ffcc52');
       pixelCircle(cx, cy, r * 0.82, '#ffdb78');
       pixelCircle(cx, cy, r * 0.5,  '#fff2b0');
+      const eyeW = Math.max(12, Math.round(r * 0.24));
+      const eyeH = Math.max(16, Math.round(r * 0.414));
+      const eyeY = Math.round(cy - r * 0.25);
+      const eyeDX = Math.round(r * 0.31);
+      ctx.fillStyle = '#5a0000';
+      ctx.fillRect(Math.round(cx - eyeDX - eyeW / 2) - 1, eyeY - 1, eyeW + 2, eyeH + 2);
+      ctx.fillRect(Math.round(cx + eyeDX - eyeW / 2) - 1, eyeY - 1, eyeW + 2, eyeH + 2);
+      ctx.fillStyle = '#ff2a2a';
+      ctx.fillRect(Math.round(cx - eyeDX - eyeW / 2), eyeY, eyeW, eyeH);
+      ctx.fillRect(Math.round(cx + eyeDX - eyeW / 2), eyeY, eyeW, eyeH);
+      ctx.fillStyle = '#ffd0d0';
+      ctx.fillRect(Math.round(cx - eyeDX - eyeW / 2) + 1, eyeY + 1, Math.max(2, Math.round(eyeW * 0.35)), Math.max(2, Math.round(eyeH * 0.22)));
+      ctx.fillRect(Math.round(cx + eyeDX - eyeW / 2) + 1, eyeY + 1, Math.max(2, Math.round(eyeW * 0.35)), Math.max(2, Math.round(eyeH * 0.22)));
+      const lensW = Math.max(10, Math.round(r * 0.6));
+      const lensH = Math.max(8, Math.round(r * 0.32));
+      const lensY = Math.round(cy - r * 0.04);
+      const gap = Math.max(3, Math.round(r * 0.08));
+      ctx.fillStyle = '#111111';
+      ctx.fillRect(Math.round(cx - gap / 2 - lensW), Math.round(lensY - lensH / 2), lensW, lensH);
+      ctx.fillRect(Math.round(cx + gap / 2), Math.round(lensY - lensH / 2), lensW, lensH);
+      ctx.fillRect(Math.round(cx - gap / 2), Math.round(lensY - Math.max(1, lensH * 0.12)), gap, Math.max(2, Math.round(lensH * 0.24)));
+      ctx.fillStyle = 'rgba(255,255,255,0.18)';
+      ctx.fillRect(Math.round(cx - gap / 2 - lensW + lensW * 0.18), Math.round(lensY - lensH / 2 + lensH * 0.18), Math.max(2, Math.round(lensW * 0.18)), Math.max(2, Math.round(lensH * 0.22)));
+      ctx.fillRect(Math.round(cx + gap / 2 + lensW * 0.18), Math.round(lensY - lensH / 2 + lensH * 0.18), Math.max(2, Math.round(lensW * 0.18)), Math.max(2, Math.round(lensH * 0.22)));
+      const mouthY = Math.round(cy + r * 0.22);
+      const mouthW = Math.max(18, Math.round(r * 0.34));
+      const mouthH = Math.max(6, Math.round(r * 0.16));
+      const mouthT = Math.max(2, Math.round(r * 0.08));
+      ctx.fillStyle = '#8b3a10';
+      ctx.fillRect(Math.round(cx - mouthW / 2), mouthY, mouthW, mouthT);
+      ctx.fillRect(Math.round(cx - mouthW / 2), mouthY + mouthT, mouthT, mouthH);
+      ctx.fillRect(Math.round(cx + mouthW / 2) - mouthT, mouthY + mouthT, mouthT, mouthH);
+      ctx.fillRect(Math.round(cx - mouthW / 2) + mouthT, mouthY + mouthH, mouthW - mouthT * 2, mouthT);
     } else {
       const g = ctx.createRadialGradient(cx, cy, r*0.5, cx, cy, r*3.5);
       g.addColorStop(0, 'rgba(245,245,220,0.28)');
