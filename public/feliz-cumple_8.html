@@ -27,6 +27,13 @@
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
   }
+  [data-typing] {
+    visibility: hidden;
+  }
+  [data-fade-block] {
+    visibility: hidden;
+    opacity: 0;
+  }
 
   .title, .name {
     position: fixed;
@@ -67,7 +74,7 @@
     left: 50%;
     top: clamp(185px, 37vh, 40vh);
     font-family: 'Press Start 2P', monospace;
-    font-size: clamp(10px, 2.2vw, 17px);
+    font-size: clamp(12px, 2.5vw, 20px);
     line-height: 2;
     color: #fff8e0;
     text-align: center;
@@ -80,20 +87,70 @@
   .note {
     position: fixed;
     left: 50%;
-    top: clamp(280px, 52vh, 54vh);
+    top: clamp(300px, 58vh, 60vh);
     font-family: 'Press Start 2P', monospace;
-    font-size: clamp(7px, 1.1vw, 11px);
-    color: #ffcf80;
+    font-size: clamp(8px, 1.27vw, 13px);
+    color: rgba(255, 255, 255, 0.95);
     text-align: center;
-    text-shadow: 2px 2px 0 #3a1a08, 0 0 8px rgba(0,0,0,0.55);
+    text-shadow: 2px 2px 0 rgba(45, 45, 45, 0.8), 0 0 8px rgba(0,0,0,0.45);
     letter-spacing: 0.5px;
     pointer-events: none;
     z-index: 10;
     animation: driftReverse 11s ease-in-out infinite;
   }
+  .message.is-visible,
+  .note.is-visible {
+    visibility: visible;
+    animation:
+      fadeBlock 420ms ease-out forwards,
+      var(--float-animation);
+  }
+  .title .char {
+    display: inline-block;
+    opacity: 0;
+    transform: scale(0.15) translateY(10px);
+    filter: blur(2px);
+    will-change: transform, opacity, filter;
+    background: inherit;
+    background-size: inherit;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .title .char.is-visible {
+    animation: titlePop 380ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
   @keyframes float {
     0%, 100% { transform: translateX(-50%) translateY(-4px); }
     50%      { transform: translateX(-50%) translateY(4px);  }
+  }
+  @keyframes titlePop {
+    0% {
+      opacity: 0;
+      transform: scale(0.15) translateY(10px);
+      filter: blur(2px);
+    }
+    70% {
+      opacity: 1;
+      transform: scale(1.08) translateY(-1px);
+      filter: blur(0);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      filter: blur(0);
+    }
+  }
+  @keyframes fadeBlock {
+    0% {
+      opacity: 0;
+      filter: blur(2px);
+    }
+    100% {
+      opacity: 1;
+      filter: blur(0);
+    }
   }
   @keyframes rainbow {
     0%   { background-position: 0%   0; }
@@ -116,22 +173,24 @@
 
   .hint {
     position: fixed;
-    bottom: 20px;
+    bottom: 56px;
     left: 50%;
     transform: translateX(-50%);
-    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: clamp(11px, 1.5vw, 15px);
-    color: rgba(245, 245, 220, 0.75);
-    text-shadow: 1px 1px 0 rgba(0,0,0,0.7), 0 0 8px rgba(0,0,0,0.5);
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(18px, 3.4vw, 34px);
+    color: rgba(245, 245, 235, 0.78);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.7), 0 0 10px rgba(0,0,0,0.45);
     pointer-events: none;
     z-index: 10;
-    letter-spacing: 0.5px;
-    animation: fade 6s ease-in-out 6s forwards;
+    letter-spacing: clamp(8px, 1.8vw, 18px);
+    width: min(92vw, 320px);
+    text-align: center;
+    animation: fade 8s ease-in-out 8s forwards;
   }
   .music-hint {
     position: fixed;
     left: 50%;
-    top: clamp(360px, 78vh, 82vh);
+    bottom: 18px;
     transform: translateX(-50%);
     font-family: 'Press Start 2P', monospace;
     font-size: clamp(7px, 1.2vw, 11px);
@@ -141,6 +200,7 @@
     pointer-events: none;
     z-index: 10;
     letter-spacing: 0.4px;
+    width: min(94vw, 520px);
   }
   @keyframes fade { to { opacity: 0; } }
 </style>
@@ -152,15 +212,15 @@
      ⬇  CAMBIA EL NOMBRE en la línea del <div class="name">
         (también puedes cambiar el texto del título si quieres)
      ══════════════════════════════════════════════════════════════════ -->
-<div class="title">Feliz cumpleaños</div>
-<div class="name">Cinthia !!</div>
-<div class="message">
+<div class="title" data-typing>Feliz cumpleaños</div>
+<div class="name" data-typing>Cinthia !!</div>
+<div class="message" data-fade-block style="--float-animation: drift 14s ease-in-out infinite;">
   que cumplas muchos años más<br>
   llenos de muchas bendiciones<br>
   y así :)
 </div>
-<div class="note">dispárale a las aves xdxd</div>
-<div class="hint">🐦 toca un ave para dispararle · ♥ toca a los animalitos</div>
+<div class="note" data-fade-block style="--float-animation: driftReverse 11s ease-in-out infinite;">dispárale a las aves xdxd</div>
+<div class="hint">← →</div>
 <div class="music-hint">(picale a la pantalla si no no hay musica)</div>
 <audio id="bgm" autoplay loop playsinline preload="auto">
   <source src="/las-mananitas-8bits.mp3" type="audio/mpeg">
@@ -177,6 +237,96 @@
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 const bgm = document.getElementById('bgm');
+const titleEl = document.querySelector('.title');
+const nameEl = document.querySelector('.name');
+const messageEl = document.querySelector('.message');
+const noteEl = document.querySelector('.note');
+
+const fullTitle = titleEl ? titleEl.textContent.trim() : '';
+const fullName = nameEl ? nameEl.textContent.trim() : '';
+const fullMessage = messageEl
+  ? messageEl.innerHTML.replace(/\s*<br\s*\/?>\s*/gi, '<br>').trim()
+  : '';
+const fullNote = noteEl ? noteEl.textContent.trim() : '';
+
+function tokenizeHtml(html) {
+  const tokens = [];
+  let i = 0;
+  while (i < html.length) {
+    if (html[i] === '<') {
+      const close = html.indexOf('>', i);
+      if (close === -1) break;
+      tokens.push(html.slice(i, close + 1));
+      i = close + 1;
+    } else {
+      tokens.push(html[i]);
+      i += 1;
+    }
+  }
+  return tokens;
+}
+
+function typeText(el, text, speed, delay) {
+  if (!el) return delay;
+  const chars = Array.from(text);
+  el.textContent = '';
+  el.style.visibility = 'visible';
+  chars.forEach((ch, idx) => {
+    setTimeout(() => {
+      el.textContent += ch;
+    }, delay + idx * speed);
+  });
+  return delay + chars.length * speed;
+}
+
+function typeTitlePop(el, text, speed, delay) {
+  if (!el) return delay;
+  const chars = Array.from(text);
+  el.innerHTML = '';
+  el.style.visibility = 'visible';
+  chars.forEach((ch, idx) => {
+    setTimeout(() => {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = ch === ' ' ? '\u00A0' : ch;
+      el.appendChild(span);
+      requestAnimationFrame(() => {
+        span.classList.add('is-visible');
+      });
+    }, delay + idx * speed);
+  });
+  return delay + chars.length * speed;
+}
+
+function typeHtml(el, html, speed, delay) {
+  if (!el) return delay;
+  const tokens = tokenizeHtml(html);
+  el.innerHTML = '';
+  el.style.visibility = 'visible';
+  tokens.forEach((token, idx) => {
+    setTimeout(() => {
+      el.innerHTML += token;
+    }, delay + idx * speed);
+  });
+  return delay + tokens.length * speed;
+}
+
+function showBlock(el, html, delay) {
+  if (!el) return delay;
+  el.innerHTML = html;
+  setTimeout(() => {
+    el.style.visibility = 'visible';
+    el.classList.add('is-visible');
+  }, delay);
+  return delay;
+}
+
+let typingDelay = 280;
+typingDelay = typeTitlePop(titleEl, fullTitle, 85, typingDelay) + 180;
+typingDelay = typeText(nameEl, fullName, 95, typingDelay) + 240;
+const blockStartDelay = typingDelay + 1500;
+showBlock(messageEl, fullMessage, blockStartDelay);
+showBlock(noteEl, fullNote, blockStartDelay + 420);
 
 function startMusic() {
   if (!bgm) return;
