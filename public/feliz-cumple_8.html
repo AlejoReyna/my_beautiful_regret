@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>✦ Feliz Cumpleaños ✦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #1a1a3e;
+  }
+  body {
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', cursive;
+  }
+  canvas {
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  .title, .name {
+    position: fixed;
+    left: 50%;
+    font-family: 'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', cursive;
+    font-weight: 900;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+    text-align: center;
+    background: linear-gradient(90deg,
+      #ff2a2a, #ff8c1a, #ffdd00, #4dd63a,
+      #2a9ce6, #6a5acd, #e040e0, #ff2a2a);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.65))
+            drop-shadow(4px 4px 0 rgba(0,0,0,0.4));
+  }
+  .title {
+    top: clamp(30px, 8vh, 10vh);
+    font-size: clamp(34px, 11vw, 82px);
+    letter-spacing: 1px;
+    animation: float 3s ease-in-out infinite,
+               rainbow 3.5s linear infinite;
+  }
+  .name {
+    top: clamp(92px, 20vh, 22vh);
+    font-size: clamp(28px, 8vw, 60px);
+    letter-spacing: 2px;
+    animation: float 3s ease-in-out infinite 0.4s,
+               rainbow 3.5s linear infinite reverse;
+  }
+  .message {
+    position: fixed;
+    left: 50%;
+    top: clamp(185px, 37vh, 40vh);
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(10px, 2.2vw, 17px);
+    line-height: 2;
+    color: #fff8e0;
+    text-align: center;
+    text-shadow: 2px 2px 0 #5a2f10, 3px 3px 0 #2d1a0a, 0 0 10px rgba(0,0,0,0.4);
+    letter-spacing: 0.5px;
+    pointer-events: none;
+    z-index: 10;
+    animation: drift 14s ease-in-out infinite;
+  }
+  .note {
+    position: fixed;
+    left: 50%;
+    top: clamp(280px, 52vh, 54vh);
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(7px, 1.1vw, 11px);
+    color: #ffcf80;
+    text-align: center;
+    text-shadow: 2px 2px 0 #3a1a08, 0 0 8px rgba(0,0,0,0.55);
+    letter-spacing: 0.5px;
+    pointer-events: none;
+    z-index: 10;
+    animation: driftReverse 11s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateX(-50%) translateY(-4px); }
+    50%      { transform: translateX(-50%) translateY(4px);  }
+  }
+  @keyframes rainbow {
+    0%   { background-position: 0%   0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes drift {
+    0%   { transform: translate(calc(-50% + 0vw),   -6px); }
+    25%  { transform: translate(calc(-50% + 16vw),   6px); }
+    50%  { transform: translate(calc(-50% + 0vw),   -6px); }
+    75%  { transform: translate(calc(-50% - 16vw),   6px); }
+    100% { transform: translate(calc(-50% + 0vw),   -6px); }
+  }
+  @keyframes driftReverse {
+    0%   { transform: translate(calc(-50% + 0vw),   3px); }
+    25%  { transform: translate(calc(-50% - 20vw),  -4px); }
+    50%  { transform: translate(calc(-50% + 0vw),   3px); }
+    75%  { transform: translate(calc(-50% + 20vw),  -4px); }
+    100% { transform: translate(calc(-50% + 0vw),   3px); }
+  }
+
+  .hint {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+    font-size: clamp(11px, 1.5vw, 15px);
+    color: rgba(245, 245, 220, 0.75);
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.7), 0 0 8px rgba(0,0,0,0.5);
+    pointer-events: none;
+    z-index: 10;
+    letter-spacing: 0.5px;
+    animation: fade 6s ease-in-out 6s forwards;
+  }
+  .music-hint {
+    position: fixed;
+    left: 50%;
+    top: clamp(360px, 78vh, 82vh);
+    transform: translateX(-50%);
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(7px, 1.2vw, 11px);
+    color: rgba(255, 245, 200, 0.92);
+    text-align: center;
+    text-shadow: 2px 2px 0 rgba(45, 26, 10, 0.9), 0 0 8px rgba(0,0,0,0.45);
+    pointer-events: none;
+    z-index: 10;
+    letter-spacing: 0.4px;
+  }
+  @keyframes fade { to { opacity: 0; } }
+</style>
+</head>
+<body>
+<!-- ══════════════════════════════════════════════════════════════════
+     ✦ INVITACIÓN DE CUMPLEAÑOS · ESTÉTICA STARDEW VALLEY ✦
+     ──────────────────────────────────────────────────────────────────
+     ⬇  CAMBIA EL NOMBRE en la línea del <div class="name">
+        (también puedes cambiar el texto del título si quieres)
+     ══════════════════════════════════════════════════════════════════ -->
+<div class="title">Feliz cumpleaños</div>
+<div class="name">Cinthia !!</div>
+<div class="message">
+  que cumplas muchos años más<br>
+  llenos de muchas bendiciones<br>
+  y así :)
+</div>
+<div class="note">dispárale a las aves xdxd</div>
+<div class="hint">🐦 toca un ave para dispararle · ♥ toca a los animalitos</div>
+<div class="music-hint">(picale a la pantalla si no no hay musica)</div>
+<audio id="bgm" autoplay loop playsinline preload="auto">
+  <source src="/las-mananitas-8bits.mp3" type="audio/mpeg">
+</audio>
+<canvas id="c"></canvas>
+
+<script>
+'use strict';
+
+/* ═══════════════════════════════════════════════════════════════════
+   SETUP · CANVAS, ESCALA Y DETECCIÓN DÍA/NOCHE
+   ═══════════════════════════════════════════════════════════════════ */
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const bgm = document.getElementById('bgm');
+
+function startMusic() {
+  if (!bgm) return;
+  bgm.volume = 0.7;
+  bgm.playbackRate = 0.9;
+  bgm.defaultPlaybackRate = 0.9;
+  if ('preservesPitch' in bgm) bgm.preservesPitch = true;
+  if ('webkitPreservesPitch' in bgm) bgm.webkitPreservesPitch = true;
+  const playPromise = bgm.play();
+  if (playPromise && typeof playPromise.catch === 'function') {
+    playPromise.catch(() => {});
+  }
+}
+
+startMusic();
+addEventListener('pointerdown', startMusic, { passive: true });
+addEventListener('keydown', startMusic);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) startMusic();
+});
+
+let W, H, PX;
+function resize() {
+  W = canvas.width = innerWidth;
+  H = canvas.height = innerHeight;
+  PX = Math.max(4, Math.round(6 * Math.min(W / 560, H / 440, 1)));
+  ctx.imageSmoothingEnabled = false;
+}
+addEventListener('resize', resize);
+resize();
+
+const HOUR = new Date().getHours();
+// Ciclo automático día/noche (un ciclo completo ≈ 45 segundos)
+const CYCLE_MS = 45000;
+// arranca en el estado actual según la hora
+const initialPhase = (HOUR < 6 || HOUR >= 19) ? 0.5 : 0;
+let dayPhase = initialPhase;
+let nightness = 0;
+let cycleT0 = performance.now();
+
+function updateCycle(t) {
+  // siempre de día; el sol se mueve muy lento sin nunca ponerse
+  dayPhase = 0.18 + 0.14 * ((Math.sin((t - cycleT0) / 50000) + 1) / 2);
+  nightness = 0;
+}
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+function lerpColor(c1, c2, t) {
+  const r1 = parseInt(c1.slice(1,3), 16), g1 = parseInt(c1.slice(3,5), 16), b1 = parseInt(c1.slice(5,7), 16);
+  const r2 = parseInt(c2.slice(1,3), 16), g2 = parseInt(c2.slice(3,5), 16), b2 = parseInt(c2.slice(5,7), 16);
+  const r = Math.round(lerp(r1, r2, t));
+  const g = Math.round(lerp(g1, g2, t));
+  const b = Math.round(lerp(b1, b2, t));
+  return `rgb(${r},${g},${b})`;
+}
+
+function mulberry32(a) {
+  return function () {
+    a = a + 0x6D2B79F5 | 0;
+    let t = a;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ESTADO
+   ═══════════════════════════════════════════════════════════════════ */
+
+let gx, gvx, targetX, facing = 1;
+let pointerX = innerWidth / 2, pointerY = innerHeight / 2;
+let pointerDown = false;
+let pointerVisible = false;
+
+const bullets = [];
+let lastShotTime = -9999;
+let audioCtx = null;
+
+function initChar() { gx = W / 2; gvx = 0; targetX = gx; }
+initChar();
+
+addEventListener('resize', () => {
+  gx = Math.max(8 * PX, Math.min(W - 8 * PX, gx));
+  targetX = gx;
+});
+
+function pd(x, y) {
+  // 1) click directo en un animal → confeti + frase
+  const hit = hitAnimal(x, y);
+  if (hit) { triggerReaction(hit.a, hit.hx, hit.hy); return; }
+  // 2) click arriba en el cielo → disparo apuntado al tap
+  const skyThreshold = H * 0.58;
+  if (y < skyThreshold) {
+    if (x > gx + 2) facing = 1;
+    else if (x < gx - 2) facing = -1;
+    shoot(x, y);
+    return;
+  }
+  // 3) click en el suelo → caminar
+  pointerDown = true; pointerVisible = true; pointerX = x; pointerY = y; targetX = x;
+}
+function pm(x, y) { pointerX = x; pointerY = y; pointerVisible = true; if (pointerDown) targetX = x; }
+function pu()     { pointerDown = false; }
+
+canvas.addEventListener('mousedown', e => pd(e.clientX, e.clientY));
+addEventListener('mousemove', e => pm(e.clientX, e.clientY));
+addEventListener('mouseup', pu);
+addEventListener('mouseleave', () => { pointerVisible = false; pointerDown = false; });
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const t = e.touches[0]; pd(t.clientX, t.clientY);
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const t = e.touches[0]; pm(t.clientX, t.clientY);
+}, { passive: false });
+canvas.addEventListener('touchend',   e => { e.preventDefault(); pu(); }, { passive: false });
+canvas.addEventListener('touchcancel', pu);
+
+/* ═══════════════════════════════════════════════════════════════════
+   DISPAROS
+   ═══════════════════════════════════════════════════════════════════ */
+
+function playShootSound() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'square';
+    o.frequency.setValueAtTime(880, now);
+    o.frequency.exponentialRampToValueAtTime(90, now + 0.18);
+    g.gain.setValueAtTime(0.001, now);
+    g.gain.exponentialRampToValueAtTime(0.18, now + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(now);
+    o.stop(now + 0.25);
+  } catch (e) { /* audio bloqueado */ }
+}
+
+function shoot(targetX_, targetY_) {
+  const now = performance.now();
+  if (now - lastShotTime < 140) return;
+  lastShotTime = now;
+
+  // posición de la boca del cañón en coords del mundo
+  const groundY = H * 0.70;
+  const feetY   = groundY + (H - groundY) * 0.58;
+  const spriteH = 24 * PX;
+  const speed = Math.abs(gvx);
+  const bobAmp = Math.min(1, speed / 12) * 5;
+  const bobOffset = Math.sin(now * 0.012) * bobAmp;
+  const oy = feetY - spriteH + bobOffset;
+
+  // el cañón está en sprite x=13-14 (centro 14). Con flip, queda en 16-14=2.
+  const muzzleSpriteX = facing > 0 ? 14 : 2;
+  const mx = (gx - 8 * PX) + muzzleSpriteX * PX;
+  const my = oy + 10 * PX;
+
+  // dirección: hacia el target si se pasó, sino arriba
+  let vx = 0, vy = -16;
+  if (targetX_ !== undefined && targetY_ !== undefined) {
+    const dx = targetX_ - mx, dy = targetY_ - my;
+    const len = Math.hypot(dx, dy) || 1;
+    const spd = 16;
+    vx = dx / len * spd;
+    vy = dy / len * spd;
+  }
+
+  bullets.push({ x: mx, y: my, vx, vy, born: now });
+  playShootSound();
+}
+
+function updateBullets(dt) {
+  for (let i = bullets.length - 1; i >= 0; i--) {
+    const b = bullets[i];
+    b.x += b.vx * dt;
+    b.y += b.vy * dt;
+    if (b.y < -40 || b.x < -40 || b.x > W + 40) bullets.splice(i, 1);
+  }
+}
+
+function drawBullets(time) {
+  for (const b of bullets) {
+    const u = Math.max(2, Math.round(PX * 0.45));
+    // estela
+    ctx.fillStyle = 'rgba(255, 200, 80, 0.55)';
+    ctx.fillRect(Math.round(b.x - u/2), Math.round(b.y + u*2), u, u*4);
+    ctx.fillStyle = 'rgba(255, 160, 40, 0.35)';
+    ctx.fillRect(Math.round(b.x - u/2), Math.round(b.y + u*6), u, u*5);
+    // bala
+    ctx.fillStyle = '#fff0a0';
+    ctx.fillRect(Math.round(b.x - u/2), Math.round(b.y), u, u*2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(Math.round(b.x - u/2), Math.round(b.y), u, u);
+  }
+}
+
+// Botón y teclado para disparar
+addEventListener('keydown', e => {
+  if (e.code === 'Space' || e.code === 'KeyX' || e.code === 'Enter') {
+    e.preventDefault();
+    shoot();
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   AVES · VUELAN POR EL CIELO Y SE PUEDEN DISPARAR
+   ═══════════════════════════════════════════════════════════════════ */
+
+const birds = [];
+const BIRD_UP = [
+  "X...X",
+  ".X.X.",
+  "..B..",
+];
+const BIRD_DN = [
+  ".....",
+  "XX.XX",
+  ".XBX.",
+];
+
+function spawnBird(atRandomX) {
+  const fromLeft = Math.random() < 0.5;
+  const sp = 1.6 + Math.random() * 1.8;
+  birds.push({
+    x: atRandomX ? Math.random() * W : (fromLeft ? -40 : W + 40),
+    y: H * (0.08 + Math.random() * 0.38),
+    vx: fromLeft ? sp : -sp,
+    vy: 0,
+    state: 'alive',
+    phase: Math.random() * 10,
+    rot: 0, spin: 0,
+    size: 0.85 + Math.random() * 0.55,
+  });
+}
+
+let _birdsInit = false;
+function updateBirds(dt) {
+  if (!_birdsInit) {
+    for (let i = 0; i < 5; i++) spawnBird(true);
+    _birdsInit = true;
+  }
+
+  // movimiento + física
+  for (const bird of birds) {
+    if (bird.state === 'alive') {
+      bird.x += bird.vx * dt;
+      // leve ondulación vertical
+      bird.y += Math.sin(performance.now() * 0.001 + bird.phase) * 0.2 * dt;
+    } else if (bird.state === 'falling') {
+      bird.vy += 0.55 * dt;
+      bird.y  += bird.vy * dt;
+      bird.x  += bird.vx * 0.25 * dt;
+      bird.rot += bird.spin * dt;
+    }
+  }
+
+  // check colisiones con balas
+  for (const bird of birds) {
+    if (bird.state !== 'alive') continue;
+    const r = 32 * bird.size;
+    for (let i = bullets.length - 1; i >= 0; i--) {
+      const b = bullets[i];
+      const dx = b.x - bird.x, dy = b.y - bird.y;
+      if (dx*dx + dy*dy < r*r) {
+        bird.state = 'falling';
+        bird.vy = 1;
+        bird.vx *= 0.3;
+        bird.spin = (Math.random() - 0.5) * 0.25 + Math.sign(bird.vx || 1) * 0.08;
+        bullets.splice(i, 1);
+        spawnFeathers(bird.x, bird.y);
+        playHitSound();
+        break;
+      }
+    }
+  }
+
+  // cleanup + respawn
+  const groundLine = H * 0.80;
+  for (let i = birds.length - 1; i >= 0; i--) {
+    const bd = birds[i];
+    if (bd.state === 'falling' && bd.y > groundLine) {
+      // impacto con el suelo: una última ráfaga de plumas
+      spawnFeathers(bd.x, groundLine, 6);
+      birds.splice(i, 1);
+    } else if (bd.state === 'alive' && (bd.x < -80 || bd.x > W + 80)) {
+      birds.splice(i, 1);
+    }
+  }
+  while (birds.filter(b => b.state === 'alive').length < 4) {
+    spawnBird(false);
+  }
+}
+
+function drawBirds() {
+  for (const bird of birds) {
+    const u = Math.max(3, Math.round(PX * 0.9 * bird.size));
+    const flapT = Math.sin(performance.now() * 0.012 + bird.phase);
+    const pattern = bird.state === 'falling' ? BIRD_DN
+                  : (flapT > 0 ? BIRD_UP : BIRD_DN);
+    const color = bird.state === 'falling' ? '#3a1f14' : '#1f1f28';
+
+    ctx.save();
+    ctx.translate(bird.x, bird.y);
+    if (bird.state === 'falling') ctx.rotate(bird.rot);
+    // flip horizontal si vuela hacia la izquierda
+    if (bird.state === 'alive' && bird.vx < 0) ctx.scale(-1, 1);
+
+    ctx.fillStyle = color;
+    const w = pattern[0].length, h = pattern.length;
+    for (let r = 0; r < h; r++) {
+      for (let c = 0; c < w; c++) {
+        const ch = pattern[r][c];
+        if (ch === '.') continue;
+        ctx.fillRect((c - w/2) * u, (r - h/2) * u, u, u);
+      }
+    }
+    ctx.restore();
+  }
+}
+
+function spawnFeathers(x, y, count) {
+  const n = count || 14;
+  const now = performance.now();
+  const colors = ['#5a3a20', '#8b5a30', '#3a2018', '#a8856a', '#2a2a2e'];
+  for (let i = 0; i < n; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const sp = 1.2 + Math.random() * 4;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * sp,
+      vy: Math.sin(angle) * sp - 1.8,
+      ay: 0.12,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      size: 2 + Math.random() * 3,
+      rot: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.2,
+      life: 1600,
+      born: now,
+    });
+  }
+}
+
+function playHitSound() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const t0 = audioCtx.currentTime;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(520, t0);
+    o.frequency.exponentialRampToValueAtTime(70, t0 + 0.2);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.22);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(t0);
+    o.stop(t0 + 0.25);
+  } catch (e) { /* bloqueado */ }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   REACCIONES · CONFETI + BURBUJAS (al tocar animales)
+   ═══════════════════════════════════════════════════════════════════ */
+
+const particles = [];
+const bubbles = [];
+
+const CONFETTI_COLORS = ['#ff3b6b', '#ff7a3b', '#ffd23b', '#3bdb68', '#3bb7ff', '#9d5bff', '#ff4fd6', '#ffffff'];
+const PHRASES = {
+  dog: ['¡guau!', '¡yay!', '¡wow!', '♥ guau'],
+  cat: ['miau~', '¡yay!', 'purr~', 'nyaa~', '♥'],
+  rat: ['¡squeak!', '¡yay!', 'chiiii', '¡hola!'],
+};
+
+function triggerReaction(animal, cx, cy) {
+  const now = performance.now();
+  // burst de confeti en cono hacia arriba
+  for (let i = 0; i < 32; i++) {
+    const angle = -Math.PI/2 + (Math.random() - 0.5) * Math.PI * 1.3;
+    const speed = 4 + Math.random() * 7;
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      ay: 0.32,
+      color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+      size: 3 + Math.random() * 5,
+      rot: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.35,
+      life: 1300 + Math.random() * 700,
+      born: now,
+    });
+  }
+  const list = PHRASES[animal.id] || ['¡yay!'];
+  const text = list[Math.floor(Math.random() * list.length)];
+  bubbles.push({ x: cx, y: cy - 20, text, born: now, life: 1600 });
+  // sonidito alegre
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const t0 = audioCtx.currentTime;
+    const notes = [660, 880, 1100];
+    notes.forEach((f, i) => {
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(f, t0 + i * 0.06);
+      g.gain.setValueAtTime(0.0001, t0 + i * 0.06);
+      g.gain.exponentialRampToValueAtTime(0.08, t0 + i * 0.06 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + i * 0.06 + 0.22);
+      o.connect(g).connect(audioCtx.destination);
+      o.start(t0 + i * 0.06);
+      o.stop(t0 + i * 0.06 + 0.25);
+    });
+  } catch (e) { /* audio bloqueado */ }
+}
+
+function updateParticles(dt) {
+  const now = performance.now();
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.vy += p.ay * dt;
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.rot += p.spin * dt;
+    if (now - p.born > p.life) particles.splice(i, 1);
+  }
+}
+
+function drawParticles() {
+  const now = performance.now();
+  for (const p of particles) {
+    const age = (now - p.born) / p.life;
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, 1 - age);
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size/2, -p.size*0.3, p.size, p.size * 0.6);
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawBubbles() {
+  const now = performance.now();
+  const fontSize = Math.max(20, Math.round(PX * 5));
+  for (let i = bubbles.length - 1; i >= 0; i--) {
+    const b = bubbles[i];
+    const age = (now - b.born) / b.life;
+    if (age >= 1) { bubbles.splice(i, 1); continue; }
+    const alpha = age > 0.75 ? Math.max(0, (1 - age) / 0.25) : 1;
+    const yLift = -age * 48;
+    const scale = age < 0.15 ? (age / 0.15) : 1;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(b.x, b.y + yLift);
+    ctx.scale(scale, scale);
+    ctx.font = `900 ${fontSize}px "Comic Sans MS", "Comic Sans", cursive`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = '#2d0a14';
+    ctx.strokeText(b.text, 0, 0);
+    const grad = ctx.createLinearGradient(-80, 0, 80, 0);
+    grad.addColorStop(0.0, '#ff4444');
+    grad.addColorStop(0.25, '#ffaa44');
+    grad.addColorStop(0.5, '#ffdd44');
+    grad.addColorStop(0.75, '#44dd77');
+    grad.addColorStop(1.0, '#66aaff');
+    ctx.fillStyle = grad;
+    ctx.fillText(b.text, 0, 0);
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   GENERACIÓN DE ESCENARIO (seeds deterministas)
+   ═══════════════════════════════════════════════════════════════════ */
+
+const LAYER_W = 2400;
+
+function genTrees(seed, n, sMin, sMax) {
+  const r = mulberry32(seed); const arr = [];
+  for (let i = 0; i < n; i++) arr.push({
+    x: r() * LAYER_W, s: sMin + r() * (sMax - sMin),
+    v: Math.floor(r() * 3), yo: r() * 6 - 3,
+  });
+  return arr;
+}
+const backTrees  = genTrees(101, 26, 0.50, 0.75);
+const midTrees   = genTrees(202, 16, 0.85, 1.20);
+const frontTrees = genTrees(303,  8, 1.30, 1.90);
+
+const clouds = (() => {
+  const r = mulberry32(55); const a = [];
+  for (let i = 0; i < 10; i++) a.push({
+    x: r() * LAYER_W, yFrac: 0.04 + r() * 0.25,
+    s: 0.7 + r() * 0.9, speed: 3 + r() * 6,
+  });
+  return a;
+})();
+
+const stars = (() => {
+  const r = mulberry32(77); const a = [];
+  for (let i = 0; i < 130; i++) a.push({
+    x: r() * LAYER_W, yFrac: r() * 0.62, tw: r() * 6.28,
+    c: r() > 0.85 ? '#ffea9a' : (r() > 0.5 ? '#f5f5dc' : '#c8d8ff'),
+  });
+  return a;
+})();
+
+const fireflies = (() => {
+  const r = mulberry32(99); const a = [];
+  for (let i = 0; i < 18; i++) a.push({
+    baseX: r() * LAYER_W, baseYFrac: 0.35 + r() * 0.35,
+    rx: 40 + r() * 70, ry: 20 + r() * 35,
+    phase: r() * 6.28, speed: 0.3 + r() * 0.6,
+  });
+  return a;
+})();
+
+const flowers = (() => {
+  const r = mulberry32(111); const a = [];
+  for (let i = 0; i < 60; i++) a.push({
+    x: r() * LAYER_W, yFrac: r(),
+    c: Math.floor(r() * 4), size: 0.7 + r() * 0.6,
+  });
+  return a;
+})();
+
+const grassTufts = (() => {
+  const r = mulberry32(133); const a = [];
+  for (let i = 0; i < 280; i++) a.push({
+    x: r() * LAYER_W, yFrac: r(),
+    shade: Math.floor(r() * 3),
+    len: 1 + Math.floor(r() * 3),
+  });
+  return a;
+})();
+
+const mushrooms = (() => {
+  const r = mulberry32(155); const a = [];
+  for (let i = 0; i < 12; i++) a.push({
+    x: r() * LAYER_W, yFrac: r(),
+    kind: r() > 0.5 ? 0 : 1,
+  });
+  return a;
+})();
+
+const pebbles = (() => {
+  const r = mulberry32(177); const a = [];
+  for (let i = 0; i < 55; i++) a.push({
+    x: r() * LAYER_W, yFrac: 0.15 + r() * 0.7,
+    c: r() > 0.5 ? 0 : 1,
+  });
+  return a;
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════════════════ */
+
+function fill(x, y, w, h, c) {
+  ctx.fillStyle = c;
+  ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+}
+
+function wrap(x, offset) {
+  let s = ((x + offset) % LAYER_W + LAYER_W) % LAYER_W;
+  if (s > W + 200) s -= LAYER_W;
+  return s;
+}
+
+function pixelCircle(cx, cy, r, color) {
+  ctx.fillStyle = color;
+  const step = Math.max(2, Math.round(r / 12));
+  for (let y = -r; y <= r; y += step) {
+    const w = Math.floor(Math.sqrt(Math.max(0, r*r - y*y))) * 2;
+    ctx.fillRect(Math.round(cx - w/2), Math.round(cy + y), w, step);
+  }
+}
+
+function pixelEllipse(cx, cy, rx, ry, color) {
+  ctx.fillStyle = color;
+  const step = Math.max(2, Math.round(Math.min(rx, ry) / 8));
+  for (let dy = -ry; dy <= ry; dy += step) {
+    const k = 1 - (dy*dy)/(ry*ry);
+    if (k < 0) continue;
+    const w = Math.floor(Math.sqrt(k) * rx * 2);
+    if (w > 0) ctx.fillRect(Math.round(cx - w/2), Math.round(cy + dy), w, step);
+  }
+}
+
+function chunkyEllipse(cx, cy, rx, ry, color) {
+  ctx.fillStyle = color;
+  const step = Math.max(PX, Math.round(Math.min(rx, ry) / 3));
+  for (let dy = -ry; dy <= ry; dy += step) {
+    const k = 1 - (dy*dy)/(ry*ry);
+    if (k < 0) continue;
+    // redondeo del ancho a múltiplos del paso → bordes cuadrados/blocosos
+    const w = Math.max(0, Math.round(Math.sqrt(k) * rx * 2 / step)) * step;
+    if (w > 0) ctx.fillRect(Math.round(cx - w/2), Math.round(cy + dy), w, step);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CIELO · SOL/LUNA · ESTRELLAS · NUBES
+   ═══════════════════════════════════════════════════════════════════ */
+
+const DAY_BANDS   = ['#4a90d9', '#5aa0e2', '#6cb0e8', '#82c3ee', '#96d3f3', '#acdef7', '#bfe6f9', '#d0ecf9'];
+const NIGHT_BANDS = ['#08081c', '#0e0e2a', '#161640', '#1e1e50', '#252561', '#2c2c70', '#343480', '#3c3c8a'];
+// tinte cálido durante dusk/dawn (pico cuando nightness ≈ 0.5)
+const DUSK_BANDS  = ['#4a2a55', '#6b3b60', '#a14f5a', '#d07050', '#e89848', '#f0b54a', '#e8bc70', '#d8c090'];
+
+function drawSky() {
+  const skyH = H * 0.70;
+  const bandH = skyH / 8;
+  // peso de tinte dusk/dawn: alto en transiciones, bajo en día/noche plenos
+  const duskWeight = Math.max(0, 1 - Math.abs(nightness - 0.5) * 2.8);
+  for (let i = 0; i < 8; i++) {
+    let col = lerpColor(DAY_BANDS[i], NIGHT_BANDS[i], nightness);
+    if (duskWeight > 0.02) {
+      col = lerpColor(col, DUSK_BANDS[i], duskWeight * 0.55);
+    }
+    fill(0, i * bandH, W, bandH + 2, col);
+  }
+}
+
+function drawCelestial(time) {
+  // El sol recorre un arco durante dayPhase [0, 0.5]; la luna durante [0.5, 1]
+  const drawBody = (bodyPhase, isSun) => {
+    // bodyPhase 0..1 (0 = rising, 0.5 = zenith, 1 = setting)
+    if (bodyPhase < -0.05 || bodyPhase > 1.05) return;
+    const p = Math.max(0, Math.min(1, bodyPhase));
+    const cx = W * (0.12 + p * 0.76);
+    const cy = H * 0.45 - Math.sin(p * Math.PI) * H * 0.32;
+    const r  = Math.max(22, Math.min(W, H) * 0.055);
+
+    // fade near horizon
+    let alpha = Math.min(1, Math.sin(p * Math.PI) * 2.2);
+    if (alpha <= 0.01) return;
+    ctx.globalAlpha = alpha;
+
+    if (isSun) {
+      const g = ctx.createRadialGradient(cx, cy, r*0.5, cx, cy, r*3);
+      g.addColorStop(0, 'rgba(255,220,100,0.38)');
+      g.addColorStop(1, 'rgba(255,220,100,0)');
+      ctx.fillStyle = g; ctx.fillRect(cx - r*3, cy - r*3, r*6, r*6);
+      pixelCircle(cx, cy, r,        '#ffcc52');
+      pixelCircle(cx, cy, r * 0.82, '#ffdb78');
+      pixelCircle(cx, cy, r * 0.5,  '#fff2b0');
+    } else {
+      const g = ctx.createRadialGradient(cx, cy, r*0.5, cx, cy, r*3.5);
+      g.addColorStop(0, 'rgba(245,245,220,0.28)');
+      g.addColorStop(1, 'rgba(245,245,220,0)');
+      ctx.fillStyle = g; ctx.fillRect(cx - r*3.5, cy - r*3.5, r*7, r*7);
+      pixelCircle(cx, cy, r, '#f5f5dc');
+      pixelCircle(cx + r*0.35, cy - r*0.15, r*0.85, '#2d2d6b');
+      fill(cx - r*0.30, cy + r*0.15, 4, 4, '#d4d4b0');
+      fill(cx - r*0.50, cy - r*0.40, 3, 3, '#d4d4b0');
+      fill(cx - r*0.10, cy + r*0.35, 3, 3, '#d4d4b0');
+    }
+    ctx.globalAlpha = 1;
+  };
+
+  // sun: when phase in [0, 0.5], map to [0, 1]
+  drawBody(dayPhase * 2, true);
+  // moon: when phase in [0.5, 1], map to [0, 1]
+  drawBody((dayPhase - 0.5) * 2, false);
+}
+
+function drawStars(time) {
+  if (nightness < 0.08) return;
+  const off = -(gx - W/2) * 0.02;
+  for (const s of stars) {
+    const sx = wrap(s.x, off);
+    if (sx < -8 || sx > W + 8) continue;
+    const sy = s.yFrac * H;
+    const tw = 0.5 + Math.sin(time * 0.002 + s.tw) * 0.5;
+    ctx.globalAlpha = (0.35 + tw * 0.65) * nightness;
+    ctx.fillStyle = s.c;
+    ctx.fillRect(Math.round(sx), Math.round(sy), 2, 2);
+    if (tw > 0.82) {
+      ctx.fillRect(Math.round(sx - 2), Math.round(sy + 1), 1, 1);
+      ctx.fillRect(Math.round(sx + 3), Math.round(sy + 1), 1, 1);
+      ctx.fillRect(Math.round(sx + 1), Math.round(sy - 2), 1, 1);
+      ctx.fillRect(Math.round(sx + 1), Math.round(sy + 3), 1, 1);
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawClouds(time) {
+  const cloudAlpha = 1 - nightness;
+  if (cloudAlpha < 0.05) return;
+  ctx.globalAlpha = cloudAlpha;
+  for (const c of clouds) {
+    const off = -(gx - W/2) * 0.08 + time * 0.015 * c.speed / 5;
+    const sx = wrap(c.x, off);
+    if (sx < -140 || sx > W + 140) continue;
+    drawCloud(sx, c.yFrac * H * 0.7 + 20, c.s);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawCloud(x, y, s) {
+  const u = Math.max(3, Math.round(PX * 0.55 * s));
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.fillRect(x,         y + u*2, u*13, u*3);
+  ctx.fillRect(x + u*2,   y + u,   u*9,  u*4);
+  ctx.fillRect(x + u*4,   y,       u*5,  u*4);
+  ctx.fillRect(x + u*8,   y + u,   u*3,  u*3);
+  ctx.fillStyle = 'rgba(200,220,240,0.82)';
+  ctx.fillRect(x + u, y + u*4, u*11, u);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(x + u*5, y, u*3, u);
+}
+
+function drawFireflies(time) {
+  if (nightness < 0.15) return;
+  const off = -(gx - W/2) * 0.18;
+  for (const f of fireflies) {
+    const fx = wrap(f.baseX, off);
+    if (fx < -40 || fx > W + 40) continue;
+    const fy = f.baseYFrac * H;
+    const dx = Math.cos(time * 0.0011 * f.speed + f.phase) * f.rx;
+    const dy = Math.sin(time * 0.0014 * f.speed + f.phase * 1.4) * f.ry;
+    const glow = 0.5 + Math.sin(time * 0.0045 + f.phase) * 0.5;
+    const x = fx + dx, y = fy + dy;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, 16);
+    g.addColorStop(0, `rgba(255,240,120,${0.55 * glow * nightness})`);
+    g.addColorStop(1, 'rgba(255,240,120,0)');
+    ctx.fillStyle = g; ctx.fillRect(x - 16, y - 16, 32, 32);
+    ctx.globalAlpha = nightness;
+    ctx.fillStyle = glow > 0.5 ? '#fff6c0' : '#f0d870';
+    ctx.fillRect(Math.round(x) - 1, Math.round(y) - 1, 3, 3);
+    ctx.globalAlpha = 1;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ÁRBOLES (3 capas con parallax)
+   ═══════════════════════════════════════════════════════════════════ */
+
+function drawTreeLayer(trees, factor, scaleBase, yFrac, dark) {
+  const off = -(gx - W/2) * factor;
+  const baseY = H * yFrac;
+  for (const t of trees) {
+    const sx = wrap(t.x, off);
+    if (sx < -160 || sx > W + 160) continue;
+    drawTree(sx, baseY + t.yo, scaleBase * t.s, t.v, dark);
+  }
+}
+
+function drawTree(x, baseY, scale, variant, dark) {
+  const u = Math.max(2, Math.round(PX * scale * 0.45));
+
+  const trunkW = 3 * u, trunkH = 7 * u;
+  const trunkL = dark ? '#4a2f1a' : '#6b4226';
+  const trunkD = dark ? '#2a1a10' : '#4a2f1a';
+  ctx.fillStyle = trunkL;
+  ctx.fillRect(x - Math.floor(trunkW/2), baseY - trunkH, trunkW, trunkH);
+  ctx.fillStyle = trunkD;
+  ctx.fillRect(x - Math.floor(trunkW/2), baseY - trunkH, u, trunkH);
+
+  const leafPalettes = [
+    ['#4aab4a', '#3d9a3d', '#1f5f1f'],
+    ['#5abb5a', '#3d9a3d', '#2d7a2d'],
+    ['#3d9a3d', '#2d7a2d', '#164014'],
+  ];
+  const palette = dark
+    ? ['#2a5a22', '#1f4018', '#142a10']
+    : leafPalettes[variant];
+  const [leafL, leafM, leafD] = palette;
+
+  const topY = baseY - trunkH;
+  const clusters = [
+    { dx:  0,       dy: -3.5*u, rx: 5.5*u, ry: 3.2*u },
+    { dx: -2.5*u,   dy: -6*u,   rx: 4.2*u, ry: 3*u  },
+    { dx:  2.5*u,   dy: -5.5*u, rx: 4*u,   ry: 3*u  },
+    { dx:  0,       dy: -8*u,   rx: 4*u,   ry: 2.5*u },
+  ];
+  for (const c of clusters) chunkyEllipse(x + c.dx, topY + c.dy, c.rx + u*0.8, c.ry + u*0.8, leafD);
+  for (const c of clusters) chunkyEllipse(x + c.dx, topY + c.dy, c.rx, c.ry, leafM);
+  if (!dark) {
+    chunkyEllipse(x - u,    topY - 6*u, 2*u,   u,    leafL);
+    chunkyEllipse(x + 2*u,  topY - 4*u, 1.5*u, u*0.8, leafL);
+    chunkyEllipse(x - 3*u,  topY - 3*u, u,     u*0.6, leafL);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SUELO · PASTO · SENDERO · FLORES · HONGOS
+   ═══════════════════════════════════════════════════════════════════ */
+
+function drawGround(time) {
+  const groundY = H * 0.70;
+  const gH = H - groundY;
+
+  const grassCols = [
+    lerpColor('#5d8a3c', '#2f4f22', nightness),
+    lerpColor('#4a7a2e', '#24401a', nightness),
+    lerpColor('#6c9c48', '#3a5d28', nightness),
+  ];
+  const dirtCols = [
+    lerpColor('#8b6914', '#3e2a12', nightness),
+    lerpColor('#6e5410', '#2e1e0a', nightness),
+    lerpColor('#a57f20', '#4f3a1a', nightness),
+  ];
+  const horizonCol = lerpColor('#3d6525', '#1f3312', nightness);
+  const pebbleHi   = lerpColor('#c5a040', '#5a4a28', nightness);
+
+  // base pasto
+  fill(0, groundY, W, gH, grassCols[1]);
+  // línea de horizonte
+  fill(0, groundY, W, Math.max(3, PX * 0.3), horizonCol);
+
+  // tufts (parallax)
+  const off = -(gx - W/2) * 0.3;
+  for (const g of grassTufts) {
+    const sx = wrap(g.x, off);
+    if (sx < -10 || sx > W + 10) continue;
+    const sy = groundY + g.yFrac * gH;
+    const u = Math.max(2, Math.round(PX * 0.4));
+    ctx.fillStyle = grassCols[g.shade];
+    ctx.fillRect(Math.round(sx), Math.round(sy), u * g.len, u);
+  }
+
+  // sendero de tierra con bordes ondulados
+  const pathY = groundY + gH * 0.36;
+  const pathH = gH * 0.30;
+  fill(0, pathY, W, pathH, dirtCols[0]);
+  // textura central
+  for (let i = 0; i < 40; i++) {
+    const px_ = ((i * 137 + (off * 0.95 | 0)) % W + W) % W;
+    const py  = pathY + pathH * 0.2 + (i % 5) * (pathH * 0.15);
+    const u   = Math.max(2, Math.round(PX * 0.4));
+    ctx.fillStyle = dirtCols[1];
+    ctx.fillRect(px_, py, u * 2, u);
+  }
+  // borde superior ondulado
+  for (let x = 0; x < W; x += Math.max(2, PX * 0.4)) {
+    const ofs = Math.round(Math.sin(x * 0.04 + 1) * 4 + Math.sin(x * 0.13) * 2);
+    const u = Math.max(2, Math.round(PX * 0.4));
+    ctx.fillStyle = grassCols[2];
+    ctx.fillRect(x, pathY + ofs - u, u, u);
+    ctx.fillStyle = dirtCols[2];
+    ctx.fillRect(x, pathY + ofs, u, u);
+  }
+  // borde inferior ondulado
+  for (let x = 0; x < W; x += Math.max(2, PX * 0.4)) {
+    const ofs = Math.round(Math.sin(x * 0.035 + 2) * 4 + Math.sin(x * 0.11) * 2);
+    const u = Math.max(2, Math.round(PX * 0.4));
+    ctx.fillStyle = dirtCols[1];
+    ctx.fillRect(x, pathY + pathH + ofs, u, u);
+    ctx.fillStyle = grassCols[1];
+    ctx.fillRect(x, pathY + pathH + ofs + u, u, u);
+  }
+
+  // piedritas
+  for (const p of pebbles) {
+    const sx = wrap(p.x, off * 0.95);
+    if (sx < -10 || sx > W + 10) continue;
+    const sy = pathY + p.yFrac * pathH;
+    const size = Math.max(2, Math.round(PX * 0.4));
+    ctx.fillStyle = p.c ? dirtCols[2] : dirtCols[1];
+    ctx.fillRect(Math.round(sx), Math.round(sy), size, size);
+    ctx.fillStyle = pebbleHi;
+    ctx.fillRect(Math.round(sx), Math.round(sy), Math.max(1, size/2 | 0), Math.max(1, size/2 | 0));
+  }
+
+  // flores (no sobre el sendero)
+  for (const f of flowers) {
+    const sx = wrap(f.x, off);
+    if (sx < -10 || sx > W + 10) continue;
+    const sy = groundY + f.yFrac * gH;
+    if (sy > pathY - 8 && sy < pathY + pathH + 8) continue;
+    drawFlower(sx, sy, f.c, f.size);
+  }
+
+  // hongos
+  for (const m of mushrooms) {
+    const sx = wrap(m.x, off);
+    if (sx < -10 || sx > W + 10) continue;
+    const sy = groundY + m.yFrac * gH;
+    if (sy > pathY - 10 && sy < pathY + pathH + 10) continue;
+    drawMushroom(sx, sy, m.kind);
+  }
+}
+
+function drawFlower(x, y, variant, size) {
+  const u = Math.max(2, Math.round(PX * size * 0.4));
+  ctx.fillStyle = lerpColor('#3a7a24', '#2a4a1c', nightness);
+  ctx.fillRect(x, y, u, u * 2);
+
+  const palettes = [
+    ['#ff6b9d', '#d43d7a'],
+    ['#ffd866', '#e6b840'],
+    ['#b58aff', '#8b5bd4'],
+    ['#ff8866', '#d46240'],
+  ];
+  const [p1, p2] = palettes[variant];
+  ctx.globalAlpha = 1 - nightness * 0.25;
+  ctx.fillStyle = p1;
+  ctx.fillRect(x - u, y - u, u, u);
+  ctx.fillRect(x + u, y - u, u, u);
+  ctx.fillRect(x,     y - u*2, u, u);
+  ctx.fillRect(x,     y,       u, u);
+  ctx.fillStyle = p2;
+  ctx.fillRect(x, y - u, u, u);
+  ctx.globalAlpha = 1;
+}
+
+function drawMushroom(x, y, kind) {
+  const u = Math.max(2, Math.round(PX * 0.4));
+  const capCol = kind === 0
+    ? lerpColor('#d84638', '#a0302a', nightness)
+    : lerpColor('#5a82d4', '#3a5aa0', nightness);
+  const stemCol = lerpColor('#f0e0b8', '#c0b090', nightness);
+  ctx.fillStyle = capCol;
+  ctx.fillRect(x - u*2, y - u*2, u*4, u*2);
+  ctx.fillRect(x - u,   y - u*3, u*2, u);
+  ctx.fillStyle = '#f5f5dc';
+  ctx.fillRect(x - u,   y - u*2, u, u);
+  ctx.fillRect(x + u,   y - u*2 + (u/2|0), Math.max(1, u/2|0), Math.max(1, u/2|0));
+  ctx.fillStyle = stemCol;
+  ctx.fillRect(x - (u/2|0), y, Math.max(u, u*1.5|0), Math.max(u, u*1.5|0));
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ANIMALES · PERRO, GATO, RATA (siguen al personaje)
+   ═══════════════════════════════════════════════════════════════════ */
+
+const animalStates = [
+  { id: 'cat', x: 0, vx: 0, offsetX: -170, speed: 0.003, damping: 0.90, facing:  1, yKind: 'path',       yFrac: 0.82, jumpY: 0, jumpT: 0, jumpDur: 0, nextJump: 1800 },
+  { id: 'dog', x: 0, vx: 0, offsetX:  160, speed: 0.004, damping: 0.90, facing: -1, yKind: 'path',       yFrac: 0.92, jumpY: 0, jumpT: 0, jumpDur: 0, nextJump: 2400 },
+  { id: 'rat', x: 0, vx: 0, offsetX:  -75, speed: 0.007, damping: 0.87, facing:  1, yKind: 'foreground', yFrac: 0.92, jumpY: 0, jumpT: 0, jumpDur: 0, nextJump: 1200 },
+];
+
+function getAnimalY(a) {
+  const groundY = H * 0.70;
+  const gH = H - groundY;
+  if (a.yKind === 'path') {
+    const pathY = groundY + gH * 0.36;
+    const pathH = gH * 0.30;
+    return pathY + pathH * a.yFrac;
+  }
+  return groundY + gH * a.yFrac;
+}
+
+function initAnimals() {
+  for (const a of animalStates) { a.x = gx + a.offsetX; a.vx = 0; }
+}
+let _animalsInit = false;
+
+function updateAnimals(dt) {
+  if (!_animalsInit) { initAnimals(); _animalsInit = true; }
+  for (const a of animalStates) {
+    const target = gx + a.offsetX;
+    a.vx += (target - a.x) * a.speed * dt;
+    a.vx *= Math.pow(a.damping, dt);
+    a.x  += a.vx * dt;
+    if (Math.abs(a.vx) > 0.15) a.facing = a.vx > 0 ? 1 : -1;
+    else a.facing = gx > a.x ? 1 : -1; // parado → mira hacia el psj
+
+    // SALTO: avanza timer, dispara saltos aleatorios
+    const stepMs = 16 * dt;
+    if (a.jumpDur > 0) {
+      a.jumpT += stepMs;
+      const p = Math.min(1, a.jumpT / a.jumpDur);
+      const peak = a.id === 'rat' ? 22 : (a.id === 'cat' ? 42 : 50);
+      a.jumpY = -Math.sin(p * Math.PI) * peak;
+      if (p >= 1) { a.jumpY = 0; a.jumpDur = 0; a.jumpT = 0;
+                    a.nextJump = 1400 + Math.random() * 3200; }
+    } else {
+      a.nextJump -= stepMs;
+      if (a.nextJump <= 0) {
+        a.jumpDur = a.id === 'rat' ? (360 + Math.random() * 140) : (460 + Math.random() * 180);
+        a.jumpT = 0;
+      }
+    }
+  }
+}
+
+function hitAnimal(px, py) {
+  for (const a of animalStates) {
+    const ay = getAnimalY(a);
+    const r = a.id === 'rat' ? 55 : 95;
+    const dx = px - a.x, dy = py - (ay - r * 0.4);
+    if (dx*dx + dy*dy < r*r) return { a, hx: a.x, hy: ay - r * 0.8 };
+  }
+  return null;
+}
+
+function drawAnimals(time) {
+  for (const a of animalStates) {
+    if (a.x < -120 || a.x > W + 120) continue;
+    const groundY = getAnimalY(a);
+    const jy = a.jumpY || 0;
+    const bodyY = groundY + jy;
+
+    // sombra en el suelo (más pequeña y tenue cuando está en el aire)
+    const u = Math.max(3, Math.round(PX * (a.id === 'rat' ? 0.55 : (a.id === 'cat' ? 0.70 : 0.75))));
+    const shH = u * 0.6;
+    const shW = a.id === 'rat' ? u*8 : (a.id === 'cat' ? u*9 : u*13);
+    const jumpFrac = Math.min(1, -jy / 50);                    // 0 en suelo, ~1 en pico
+    const shScale  = 1 - jumpFrac * 0.35;
+    const shAlpha  = 0.28 * (1 - jumpFrac * 0.55);
+    ctx.fillStyle = `rgba(0,0,0,${shAlpha})`;
+    const shY = a.id === 'rat' ? groundY + u*0.8 : groundY + u*0.2;
+    ctx.fillRect(a.x - (shW * shScale) / 2, shY, shW * shScale, shH);
+
+    ctx.save();
+    if (a.facing < 0) {
+      ctx.translate(a.x * 2, 0);
+      ctx.scale(-1, 1);
+    }
+    if (a.id === 'dog')      drawDog(a.x, bodyY, time);
+    else if (a.id === 'cat') drawCat(a.x, bodyY, time);
+    else                     drawRat(a.x, bodyY, time);
+    ctx.restore();
+  }
+}
+
+function drawDog(cx, baseY, t) {
+  const u = Math.max(3, Math.round(PX * 0.75));
+  const B = '#d8a06a', D = '#8b5832', W = '#f5e5c5', N = '#1a0a05', E = '#1a0a05';
+  const wag = Math.sin(t * 0.012) > 0 ? 0 : -1;
+  const bob = Math.round(Math.sin(t * 0.005) * 1);
+
+  // patas traseras
+  ctx.fillStyle = D;
+  ctx.fillRect(cx - u*4, baseY - u*2, u, u*2);
+  ctx.fillRect(cx - u*2, baseY - u*2, u, u*2);
+  // patas delanteras
+  ctx.fillRect(cx + u*2, baseY - u*2, u, u*2);
+  ctx.fillRect(cx + u*4, baseY - u*2, u, u*2);
+
+  // cuerpo alargado
+  ctx.fillStyle = B;
+  ctx.fillRect(cx - u*4, baseY - u*4 + bob, u*9, u*2);
+  // sombra de la panza
+  ctx.fillStyle = D;
+  ctx.fillRect(cx - u*4, baseY - u*2 - u + bob, u*9, u);
+  // parche blanco panza
+  ctx.fillStyle = W;
+  ctx.fillRect(cx - u*2, baseY - u*3 + bob, u*3, u);
+
+  // cabeza (a la derecha)
+  ctx.fillStyle = B;
+  ctx.fillRect(cx + u*3, baseY - u*6 + bob, u*4, u*3);
+  // orejas caídas
+  ctx.fillStyle = D;
+  ctx.fillRect(cx + u*3, baseY - u*7 + bob, u, u*2);
+  ctx.fillRect(cx + u*6, baseY - u*7 + bob, u, u*2);
+  // hocico blanco
+  ctx.fillStyle = W;
+  ctx.fillRect(cx + u*5, baseY - u*4 + bob, u*2, u);
+  // ojo
+  ctx.fillStyle = E;
+  ctx.fillRect(cx + u*5, baseY - u*5 + bob, u, u);
+  // nariz
+  ctx.fillStyle = N;
+  ctx.fillRect(cx + u*6, baseY - u*4 + bob, u, u);
+
+  // cola moviendose
+  ctx.fillStyle = B;
+  ctx.fillRect(cx - u*5, baseY - u*4 + bob, u, u);
+  ctx.fillRect(cx - u*6, baseY - u*5 + wag*u + bob, u, u);
+  ctx.fillRect(cx - u*7, baseY - u*5 + wag*u + bob, u, u);
+}
+
+function drawCat(cx, baseY, t) {
+  const u = Math.max(3, Math.round(PX * 0.70));
+  const O = '#e69040', D = '#a8541c', W = '#f5dcc0', P = '#e89aaa', E = '#1a2a14';
+  const tw = Math.round(Math.sin(t * 0.008) * 2);
+  const blink = (Math.floor(t / 3200) % 10 === 0) ? 1 : 0;
+
+  // patas traseras (sentado)
+  ctx.fillStyle = O;
+  ctx.fillRect(cx - u*2, baseY - u*2, u*5, u*2);
+
+  // cuerpo sentado (triangular)
+  ctx.fillStyle = O;
+  ctx.fillRect(cx - u*2, baseY - u*4, u*4, u*2);
+  // rayas tabby en cuerpo
+  ctx.fillStyle = D;
+  ctx.fillRect(cx - u,   baseY - u*4, u, u);
+  ctx.fillRect(cx + u,   baseY - u*4, u, u);
+
+  // cabeza
+  ctx.fillStyle = O;
+  ctx.fillRect(cx - u*3, baseY - u*7, u*5, u*3);
+  // orejas triangulares
+  ctx.fillRect(cx - u*3, baseY - u*8, u, u);
+  ctx.fillRect(cx + u,   baseY - u*8, u, u);
+  // interior oreja rosa
+  ctx.fillStyle = P;
+  ctx.fillRect(cx - u*2.5, baseY - u*7.5, u*0.5, u*0.5);
+  ctx.fillRect(cx + u*1.5, baseY - u*7.5, u*0.5, u*0.5);
+
+  // rayas en cabeza
+  ctx.fillStyle = D;
+  ctx.fillRect(cx - u*2, baseY - u*7, u, u);
+  ctx.fillRect(cx,       baseY - u*7, u, u);
+  ctx.fillRect(cx + u,   baseY - u*7, u, u);
+
+  // ojos (cerrados cuando parpadea)
+  ctx.fillStyle = E;
+  if (blink) {
+    ctx.fillRect(cx - u*2, baseY - u*5.5, u, u*0.3);
+    ctx.fillRect(cx + u,   baseY - u*5.5, u, u*0.3);
+  } else {
+    ctx.fillRect(cx - u*2, baseY - u*6, u, u);
+    ctx.fillRect(cx + u,   baseY - u*6, u, u);
+  }
+
+  // nariz rosa
+  ctx.fillStyle = P;
+  ctx.fillRect(cx - u*0.5, baseY - u*5, u, u*0.5);
+  // boca
+  ctx.fillStyle = E;
+  ctx.fillRect(cx - u,   baseY - u*4.5, u*0.5, u*0.3);
+  ctx.fillRect(cx + u*0.5, baseY - u*4.5, u*0.5, u*0.3);
+
+  // pecho blanco
+  ctx.fillStyle = W;
+  ctx.fillRect(cx - u*0.5, baseY - u*4, u, u*2);
+
+  // cola larga ondulando
+  ctx.fillStyle = O;
+  ctx.fillRect(cx + u*3, baseY - u*2 + tw, u, u);
+  ctx.fillRect(cx + u*4, baseY - u*3 + tw, u, u);
+  ctx.fillRect(cx + u*4, baseY - u*4 + tw, u, u);
+  ctx.fillRect(cx + u*5, baseY - u*4 + tw, u, u);
+  // punta oscura cola
+  ctx.fillStyle = D;
+  ctx.fillRect(cx + u*5, baseY - u*5 + tw, u, u);
+
+  // patas delanteras
+  ctx.fillStyle = O;
+  ctx.fillRect(cx - u*1, baseY - u, u, u);
+  ctx.fillRect(cx + u,   baseY - u, u, u);
+}
+
+function drawRat(cx, baseY, t) {
+  const u = Math.max(3, Math.round(PX * 0.55));
+  const G = '#a8a095', D = '#5e5a52', P = '#e89aaa', E = '#1a0a05';
+  const scurry = Math.round(Math.sin(t * 0.015) * 1);
+
+  // cuerpo alargado bajito
+  ctx.fillStyle = G;
+  ctx.fillRect(cx - u*2, baseY - u*2, u*5, u*2);
+  // sombra panza
+  ctx.fillStyle = D;
+  ctx.fillRect(cx - u*2, baseY - u, u*5, u*0.5);
+
+  // cabeza puntiaguda adelante
+  ctx.fillStyle = G;
+  ctx.fillRect(cx + u*2, baseY - u*3, u*2, u*2);
+  ctx.fillRect(cx + u*3, baseY - u*2, u, u);
+  // orejas redondas
+  ctx.fillRect(cx + u*2, baseY - u*4, u, u);
+  ctx.fillStyle = P;
+  ctx.fillRect(cx + u*2.3, baseY - u*3.7, u*0.5, u*0.5);
+
+  // ojo
+  ctx.fillStyle = E;
+  ctx.fillRect(cx + u*3, baseY - u*3, u*0.6, u*0.6);
+  // nariz
+  ctx.fillStyle = P;
+  ctx.fillRect(cx + u*4, baseY - u*2, u*0.7, u*0.7);
+
+  // cola larga rosada enroscada
+  ctx.fillStyle = P;
+  ctx.fillRect(cx - u*3, baseY - u + scurry*u, u, u*0.6);
+  ctx.fillRect(cx - u*4, baseY - u*2 + scurry*u, u, u*0.6);
+  ctx.fillRect(cx - u*5, baseY - u + scurry*u, u, u*0.6);
+  ctx.fillRect(cx - u*6, baseY + scurry*u, u, u*0.6);
+
+  // patitas
+  ctx.fillStyle = D;
+  ctx.fillRect(cx - u*1, baseY, u*0.6, u);
+  ctx.fillRect(cx + u*1, baseY, u*0.6, u);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PASTEL DE CUMPLEAÑOS 🎂
+   ═══════════════════════════════════════════════════════════════════ */
+
+function drawCake(time) {
+  const cx = W * 0.22;
+  const groundY = H * 0.70;
+  const gH = H - groundY;
+  const baseY = groundY + gH * 0.40; // sobre el pasto, detrás del sendero
+
+  const u = Math.max(3, Math.round(PX * 0.85));
+
+  // paletas
+  const BOT_C = '#8b5a30', BOT_H = '#a87040', BOT_S = '#5a3820';
+  const MID_C = '#ffc2d8', MID_H = '#ffdce6', MID_S = '#d89db0';
+  const TOP_C = '#ffe484', TOP_H = '#fff2b0';
+  const FROST = '#fff5e8';
+  const PLATE = '#e0dcd0', PLATE_S = '#9a938a';
+
+  // Plato
+  const pw = 20 * u;
+  ctx.fillStyle = PLATE;
+  ctx.fillRect(cx - pw/2, baseY, pw, u);
+  ctx.fillStyle = PLATE_S;
+  ctx.fillRect(cx - pw/2, baseY + u, pw, Math.max(2, Math.round(u * 0.5)));
+
+  // Piso inferior (más ancho)
+  const bw = 16 * u, bh = 4 * u;
+  const by = baseY - bh;
+  ctx.fillStyle = BOT_C;
+  ctx.fillRect(cx - bw/2, by, bw, bh);
+  ctx.fillStyle = BOT_H;
+  ctx.fillRect(cx - bw/2, by, bw, u);
+  ctx.fillStyle = BOT_S;
+  ctx.fillRect(cx - bw/2, by + bh - u, bw, u);
+
+  // Betún entre piso inferior y medio
+  ctx.fillStyle = FROST;
+  ctx.fillRect(cx - bw/2 - u, by - u, bw + u*2, u);
+  // chorreos
+  for (let i = -3; i <= 3; i++) {
+    ctx.fillRect(cx + i * u*2, by, u, Math.max(2, Math.round(u * 0.5)));
+  }
+
+  // Piso medio
+  const mw = 12 * u, mh = 4 * u;
+  const my = by - u - mh;
+  ctx.fillStyle = MID_C;
+  ctx.fillRect(cx - mw/2, my, mw, mh);
+  ctx.fillStyle = MID_H;
+  ctx.fillRect(cx - mw/2, my, mw, u);
+  ctx.fillStyle = MID_S;
+  ctx.fillRect(cx - mw/2, my + mh - u, mw, u);
+
+  // Betún entre piso medio y superior
+  ctx.fillStyle = FROST;
+  ctx.fillRect(cx - mw/2 - u, my - u, mw + u*2, u);
+  for (let i = -2; i <= 2; i++) {
+    ctx.fillRect(cx + i * u*2, my, u, Math.max(2, Math.round(u * 0.5)));
+  }
+
+  // Piso superior (más chico)
+  const tw = 8 * u, th = 3 * u;
+  const ty = my - u - th;
+  ctx.fillStyle = TOP_C;
+  ctx.fillRect(cx - tw/2, ty, tw, th);
+  ctx.fillStyle = TOP_H;
+  ctx.fillRect(cx - tw/2, ty, tw, u);
+
+  // Velas con llama
+  const candleColors = ['#e64040', '#4090e0', '#50b458'];
+  const candleH = 3 * u;
+  const candleY = ty - candleH;
+  for (let i = 0; i < 3; i++) {
+    const cxC = cx - 3*u + i * 3*u - u/2;
+    ctx.fillStyle = candleColors[i];
+    ctx.fillRect(cxC, candleY, u, candleH);
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.fillRect(cxC, candleY + u, u, Math.max(2, Math.round(u * 0.45)));
+
+    // pabilo
+    ctx.fillStyle = '#2a2a2a';
+    ctx.fillRect(cxC + u * 0.35, candleY - u * 0.6, Math.max(1, Math.round(u * 0.3)), u * 0.8);
+
+    // flama (flicker)
+    const flicker = Math.round(Math.sin(time * 0.008 + i * 2.2) * 1);
+    const flameX = cxC - u * 0.3;
+    const flameY = candleY - u * 2.4 + flicker;
+    ctx.fillStyle = '#ff8a20';
+    ctx.fillRect(flameX, flameY, u * 1.6, u * 2);
+    ctx.fillStyle = '#ffdc40';
+    ctx.fillRect(flameX + u * 0.4, flameY + u * 0.4, u * 0.8, u * 1.3);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(flameX + u * 0.6, flameY + u * 0.8, Math.max(1, Math.round(u * 0.4)), u * 0.6);
+  }
+
+  // Chispitas alrededor (solo un poco de vida)
+  for (let i = 0; i < 4; i++) {
+    const a = time * 0.002 + i * Math.PI / 2;
+    const rx = u * 14 + Math.sin(a * 1.5) * u * 2;
+    const ry = u * 10 + Math.cos(a * 1.3) * u * 1.5;
+    const sx = cx + Math.cos(a) * rx;
+    const sy = ty - u * 3 + Math.sin(a) * ry;
+    const pulse = 0.5 + Math.sin(time * 0.01 + i) * 0.5;
+    ctx.fillStyle = `rgba(255, 240, 120, ${pulse})`;
+    ctx.fillRect(Math.round(sx), Math.round(sy), Math.max(2, Math.round(u * 0.4)), Math.max(2, Math.round(u * 0.4)));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PERSONAJE (16×24 sprite, dibujado con fillRect)
+   ═══════════════════════════════════════════════════════════════════ */
+
+const C = {
+  HAT: '#d8bc89', HAT_S: '#ac8e5c', BAND: '#8b4a1a', BAND_H: '#d4a868',
+  HAIR: '#3a1f0a', HAIR_S: '#24120a', HAIR_H: '#5a331a',
+  SKIN: '#f5c9a0', SKIN_S: '#d4a478',
+  EYE: '#1a0f05', EYE_HI: '#5a90d8',
+  CHEEK: '#e89a9a', MOUTH: '#a04848',
+  SHIRT: '#5aa3dc', SHIRT_S: '#3d7aaa', SHIRT_H: '#86c1e8',
+  OVER: '#2d5a1f', OVER_S: '#1a3d14',
+  BUTTON: '#f0d080',
+  BOOT: '#5c3a1a', BOOT_S: '#2d1a0a',
+};
+
+function drawCharacter(time) {
+  const speed = Math.abs(gvx);
+  const maxSpeed = 12;
+  const bobAmp = Math.min(1, speed / maxSpeed) * 5;
+  const bobOffset = Math.sin(time * 0.012) * bobAmp;
+
+  const groundY = H * 0.70;
+  const feetY   = groundY + (H - groundY) * 0.58;
+  const cx = gx;
+  const spriteW = 16 * PX;
+  const spriteH = 24 * PX;
+  const ox = cx - spriteW / 2;
+  const oy = feetY - spriteH + bobOffset;
+
+  // sombra elipse
+  ctx.fillStyle = 'rgba(0,0,0,0.32)';
+  ctx.beginPath();
+  ctx.ellipse(cx, feetY + PX * 0.3, 7 * PX, 1.8 * PX, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.save();
+  if (facing < 0) {
+    ctx.translate(ox + spriteW, oy);
+    ctx.scale(-1, 1);
+  } else {
+    ctx.translate(ox, oy);
+  }
+
+  const p = (sx, sy, sw, sh, col) => {
+    ctx.fillStyle = col;
+    ctx.fillRect(sx * PX, sy * PX, sw * PX, sh * PX);
+  };
+
+  // PELO (sin sombrero, largo cayendo a los hombros)
+  p(5, 2, 6, 1, C.HAIR);
+  p(5, 2, 1, 1, C.HAIR_S);
+  p(10, 2, 1, 1, C.HAIR_S);
+
+  p(4, 3, 8, 1, C.HAIR);
+  p(4, 3, 1, 1, C.HAIR_S);
+  p(11, 3, 1, 1, C.HAIR_S);
+  p(7, 3, 2, 1, C.HAIR_H);
+
+  p(3, 4, 10, 1, C.HAIR);
+  p(3, 4, 1, 1, C.HAIR_S);
+  p(12, 4, 1, 1, C.HAIR_S);
+  p(6, 4, 3, 1, C.HAIR_H);
+
+  p(2, 5, 12, 1, C.HAIR);
+  p(2, 5, 1, 1, C.HAIR_S);
+  p(13, 5, 1, 1, C.HAIR_S);
+
+  // Fleco + laterales bajando
+  p(2, 6, 12, 1, C.HAIR);
+  p(2, 7, 12, 1, C.HAIR);
+  p(2, 6, 1, 8, C.HAIR_S);
+  p(13, 6, 1, 8, C.HAIR_S);
+  p(3, 8, 1, 5, C.HAIR);
+  p(12, 8, 1, 5, C.HAIR);
+  p(5, 7, 2, 1, C.HAIR_S);
+  p(9, 7, 2, 1, C.HAIR_S);
+
+  // CARA
+  p(4, 8, 8, 4, C.SKIN);
+  p(5, 9, 2, 2, C.EYE);
+  p(9, 9, 2, 2, C.EYE);
+  p(5, 9, 1, 1, C.EYE_HI);
+  p(9, 9, 1, 1, C.EYE_HI);
+  p(4, 10, 1, 1, C.CHEEK);
+  p(11, 10, 1, 1, C.CHEEK);
+  p(7, 11, 2, 1, C.MOUTH);
+  p(4, 12, 8, 1, C.SKIN_S);
+  p(7, 12, 2, 1, C.SKIN);
+
+  // VESTIDO NEGRO SIN MANGAS
+  const DRESS = '#121212';
+  const DRESS_H = '#2e2e2e';
+  const DRESS_S = '#000000';
+
+  // Row 13: escote + hombros expuestos
+  p(5, 13, 6, 1, DRESS);          // escote recto
+  p(4, 13, 1, 1, DRESS);
+  p(11, 13, 1, 1, DRESS);
+  p(3, 13, 1, 1, C.SKIN);         // hombro izq
+  p(12, 13, 1, 1, C.SKIN);        // hombro der
+
+  // Row 14-15: torso superior + brazos al aire
+  p(4, 14, 8, 2, DRESS);
+  p(4, 14, 1, 2, DRESS_H);        // highlight izq
+  p(11, 14, 1, 2, DRESS_S);       // sombra der
+  p(3, 14, 1, 3, C.SKIN);         // brazo izq (piel)
+  p(12, 14, 1, 3, C.SKIN);        // brazo der (piel)
+  p(3, 16, 1, 1, C.SKIN_S);
+  p(12, 16, 1, 1, C.SKIN_S);
+
+  // Row 16-17: torso + ante brazos colgando
+  p(4, 16, 8, 2, DRESS);
+  p(2, 15, 1, 3, C.SKIN);         // antebrazo izq (más afuera)
+  p(13, 15, 1, 3, C.SKIN);        // antebrazo der
+  p(2, 17, 1, 1, C.SKIN_S);
+  p(13, 17, 1, 1, C.SKIN_S);
+
+  // Row 18: bajo del torso
+  p(4, 18, 8, 1, DRESS);
+  p(3, 18, 1, 1, C.SKIN);         // manos
+  p(12, 18, 1, 1, C.SKIN);
+
+  // Row 19-20: falda (ligeramente acampanada)
+  p(3, 19, 10, 1, DRESS);
+  p(3, 19, 1, 1, DRESS_H);
+  p(12, 19, 1, 1, DRESS_S);
+  p(3, 20, 10, 1, DRESS);
+  p(3, 20, 10, 1, DRESS_S);       // línea del bajo (sombra)
+
+  // Row 21: piernas expuestas (piel)
+  p(3, 21, 4, 1, C.SKIN);
+  p(9, 21, 4, 1, C.SKIN);
+  p(3, 21, 1, 1, C.SKIN_S);
+  p(12, 21, 1, 1, C.SKIN_S);
+
+  // BOTAS con suela oscura
+  p(3, 22, 4, 1, C.BOOT);
+  p(9, 22, 4, 1, C.BOOT);
+  p(3, 23, 4, 1, C.BOOT_S);
+  p(9, 23, 4, 1, C.BOOT_S);
+
+  // PISTOLA (empuñada en la mano derecha, cañón hacia arriba)
+  const GUN = '#2a2a38', GUN_H = '#6a6a80', GUN_D = '#0e0e18', GRIP = '#3a1e10';
+  // cañón vertical (x=13-14, subiendo de y=10 a y=15)
+  p(13, 11, 2, 5, GUN);
+  p(13, 11, 1, 5, GUN_H);
+  // boca del cañón (más oscura)
+  p(13, 10, 2, 1, GUN_D);
+  // cuerpo/guardamonte (a la altura de la mano)
+  p(12, 15, 3, 2, GUN);
+  p(12, 15, 1, 1, GUN_H);
+  // empuñadura (marrón, donde agarra la mano)
+  p(12, 17, 2, 2, GRIP);
+  p(12, 17, 1, 1, '#5a3020');
+
+  // FOGONAZO cuando acaba de disparar
+  if (time - lastShotTime < 100) {
+    const fl = 1 - (time - lastShotTime) / 100;
+    ctx.fillStyle = `rgba(255, 240, 120, ${fl})`;
+    ctx.fillRect(12 * PX, (10 - 2) * PX, 4 * PX, 2 * PX);
+    ctx.fillStyle = `rgba(255, 180, 60, ${fl * 0.9})`;
+    ctx.fillRect(13 * PX, (10 - 3) * PX, 2 * PX, 1 * PX);
+    ctx.fillStyle = `rgba(255, 255, 255, ${fl})`;
+    ctx.fillRect(13 * PX, (10 - 1) * PX, 2 * PX, 1 * PX);
+  }
+
+  ctx.restore();
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   CURSOR CORAZÓN ♥
+   ═══════════════════════════════════════════════════════════════════ */
+
+const HEART = [
+  "..oo..oo..",
+  ".oRRooRRo.",
+  "oRRhRRRRRo",
+  "oRRRRRRRRo",
+  ".oRRRRRRo.",
+  "..oRRRRo..",
+  "...oRRo...",
+  "....oo....",
+];
+
+function drawHeartCursor(time) {
+  if (!pointerVisible) return;
+  const u = Math.max(2, Math.round(PX * 0.55));
+  const pulse = 1 + Math.sin(time * 0.008) * 0.12;
+  const W_ = 10, H_ = 8;
+
+  ctx.save();
+  ctx.translate(pointerX, pointerY);
+  ctx.scale(pulse, pulse);
+  ctx.translate(-W_ * u / 2, -H_ * u / 2);
+
+  for (let r = 0; r < HEART.length; r++) {
+    const row = HEART[r];
+    for (let c = 0; c < row.length; c++) {
+      const ch = row[c];
+      if (ch === '.') continue;
+      ctx.fillStyle =
+        ch === 'o' ? '#2d0a14' :
+        ch === 'R' ? '#ff5a7a' :
+        ch === 'h' ? '#ffcfd8' : '#ff5a7a';
+      ctx.fillRect(c * u, r * u, u, u);
+    }
+  }
+  ctx.restore();
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LOOP PRINCIPAL
+   ═══════════════════════════════════════════════════════════════════ */
+
+let lastT = performance.now();
+function loop() {
+  const now = performance.now();
+  const dt = Math.min(32, now - lastT) / 16.666;
+  lastT = now;
+
+  // ciclo día/noche
+  updateCycle(now);
+
+  // física: aceleración hacia el target + fricción
+  gvx += (targetX - gx) * 0.01 * dt;
+  gvx *= Math.pow(0.88, dt);
+  gx  += gvx * dt;
+
+  // actualizar balas, animales, aves y partículas
+  updateBullets(dt);
+  updateAnimals(dt);
+  updateBirds(dt);
+  updateParticles(dt);
+
+  // límites
+  const halfW = 8 * PX;
+  if (gx < halfW)         { gx = halfW;         gvx = Math.max(0, gvx); }
+  if (gx > W - halfW)     { gx = W - halfW;     gvx = Math.min(0, gvx); }
+
+  // flip horizontal
+  if (Math.abs(gvx) > 0.15) facing = gvx > 0 ? 1 : -1;
+
+  // render
+  drawSky();
+  drawCelestial(now);
+  drawStars(now);
+  drawClouds(now);
+  drawBirds();
+  drawGround(now);
+  drawCake(now);
+  drawAnimals(now);
+  drawFireflies(now);
+  drawCharacter(now);
+  drawBullets(now);
+  drawParticles();
+  drawBubbles();
+
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
